@@ -19,14 +19,17 @@ impl SummaryEntry {
         let amount = self.path_string().matches('/').count();
         if amount == 0 {
             return 0
-        } else if self.path_string().ends_with("README.md") {
+        } else if self.path_string().ends_with("/README.md") {
+            // These are section head in the doc
             return amount - 1
         }
         amount
     }
 
     fn link(&self) -> String {
-        format!("[{}]({})", self.title, self.path_string())
+        // mdbook won't like spaces in paths, escape them
+        // TODO: other characters concerned?
+        format!("[{}]({})", self.title, self.path_string().replace(" ","%20"))
     }
 
     fn path_string(&self) -> &str {
